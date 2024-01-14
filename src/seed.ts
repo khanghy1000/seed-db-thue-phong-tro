@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
-import type { ct_dich_vu, ct_thiet_bi } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -182,7 +181,7 @@ const seedCtThietBi = async () => {
         return !inserted;
     });
     await prisma.ct_thiet_bi.createMany({
-        data: result.filter((item) => item != null) as ct_thiet_bi[],
+        data: result,
     });
 };
 
