@@ -2,7 +2,7 @@
 
 1. Tải [node.js LTS](https://nodejs.org/en)
 2. Clone repo
-3. Chạy file ```/script/create.sql``` để tạo database
+3. Chạy file ```/scripts/create.sql``` để tạo database
 4. Tạo file ```.env``` trong project và thêm connection string của database vào file ```.env```. Ví dụ:
 
 ```js
