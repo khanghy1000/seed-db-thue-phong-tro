@@ -128,17 +128,6 @@ CREATE TABLE yeu_cau_xem_phong (
     FOREIGN KEY (ma_nguoi_tim_phong) REFERENCES nguoi_tim_phong (ma_nguoi_tim_phong),
 )
 
--- CREATE TABLE yeu_cau_thue (
---     ma_yeu_cau_thue  INT          NOT NULL IDENTITY (1, 1) PRIMARY KEY,
---     ma_phong         INT          NOT NULL,
---     ma_nguoi_thue    INT          NOT NULL,
---     ngay_gio_yeu_cau DATETIME     NOT NULL,
---     trang_thai       NVARCHAR(50) NOT NULL,
---     CHECK (trang_thai = N'Chờ duyệt' OR trang_thai = N'Đồng ý' OR trang_thai = N'Từ chối'),
---     FOREIGN KEY (ma_phong) REFERENCES phong (ma_phong),
---     FOREIGN KEY (ma_nguoi_thue) REFERENCES nguoi_thue (ma_nguoi_thue),
--- )
-
 CREATE TABLE ct_thue_phong (
     ma_phong           INT          NOT NULL,
     ma_nguoi_tim_phong INT          NOT NULL,
