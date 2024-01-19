@@ -6,7 +6,7 @@
 
 - Có nhiều chủ trọ cho thuê phòng, mỗi chủ trọ sẽ có mã riêng, họ đệm, tên, số căn cước, giới tính, ngày sinh, email, số điện thoại.
 
-- Chủ trọ có thể đăng cho thuê nhiều phòng, mỗi phòng chỉ thuộc 1 chủ trọ. Mỗi phòng trọ sẽ có mã phòng riêng, tên phòng, số nhà, số lượng người tối đa, diện tích phòng, giá thuê.
+- Chủ trọ có thể đăng cho thuê nhiều phòng, mỗi phòng chỉ thuộc 1 chủ trọ. Mỗi phòng trọ sẽ có mã phòng riêng, tên phòng, địa chỉ nhà, số lượng người tối đa, diện tích phòng, giá thuê. Người tìm phòng có thể lọc phòng trọ theo tỉnh, quận huyện, phường xã.
 
 - Có nhiều phường xã, mỗi phường xã có thể có nhiều phòng trọ, mỗi phòng trọ chỉ thuộc 1 phường xã.
 
