@@ -1,10 +1,10 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, ct_thue_phong } from '@prisma/client';
 import { faker } from '@faker-js/faker';
 
 const prisma = new PrismaClient();
 
 const seedNguoiTimPhong = async () => {
-    const result = Array.from(Array(50)).map((_) => {
+    let result = Array.from(Array(50)).map((_) => {
         return {
             ho_dem: faker.person.lastName(),
             ten: faker.person.firstName(),
@@ -20,13 +20,19 @@ const seedNguoiTimPhong = async () => {
                 max: 9_999_999_999,
             }),
         };
+    });
+
+    result = result.filter((item, pos) => {
+        return (
+            result.findIndex((e) => e.so_can_cuoc == item.so_can_cuoc) == pos
+        );
     });
 
     await prisma.nguoi_tim_phong.createMany({ data: result });
 };
 
 const seedChuPhong = async () => {
-    const result = Array.from(Array(10)).map((_) => {
+    let result = Array.from(Array(10)).map((_) => {
         return {
             ho_dem: faker.person.lastName(),
             ten: faker.person.firstName(),
@@ -44,14 +50,24 @@ const seedChuPhong = async () => {
         };
     });
 
+    result = result.filter((item, pos) => {
+        return (
+            result.findIndex((e) => e.so_can_cuoc == item.so_can_cuoc) == pos
+        );
+    });
+
     await prisma.chu_phong.createMany({ data: result });
 };
 
 const seedTinh = async () => {
-    const result = Array.from(Array(10)).map((_) => {
+    let result = Array.from(Array(10)).map((_) => {
         return {
             ten_tinh: faker.location.state(),
         };
+    });
+
+    result = result.filter((item, pos) => {
+        return result.findIndex((e) => e.ten_tinh == item.ten_tinh) == pos;
     });
 
     await prisma.tinh.createMany({ data: result });
@@ -60,11 +76,21 @@ const seedTinh = async () => {
 const seedQuanHuyen = async () => {
     const tinh = await prisma.tinh.findMany();
 
-    const result = Array.from(Array(30)).map((_) => {
+    let result = Array.from(Array(30)).map((_) => {
         return {
             ten_quan_huyen: faker.location.city(),
             ma_tinh: tinh[Math.floor(Math.random() * tinh.length)].ma_tinh,
         };
+    });
+
+    result = result.filter((item, pos) => {
+        return (
+            result.findIndex(
+                (e) =>
+                    e.ten_quan_huyen == item.ten_quan_huyen &&
+                    e.ma_tinh == item.ma_tinh
+            ) == pos
+        );
     });
 
     await prisma.quan_huyen.createMany({ data: result });
@@ -73,13 +99,23 @@ const seedQuanHuyen = async () => {
 const seedPhuongXa = async () => {
     const quanHuyen = await prisma.quan_huyen.findMany();
 
-    const result = Array.from(Array(70)).map((_) => {
+    let result = Array.from(Array(70)).map((_) => {
         return {
             ten_phuong_xa: faker.lorem.words(2),
             ma_quan_huyen:
                 quanHuyen[Math.floor(Math.random() * quanHuyen.length)]
                     .ma_quan_huyen,
         };
+    });
+
+    result = result.filter((item, pos) => {
+        return (
+            result.findIndex(
+                (e) =>
+                    e.ma_quan_huyen == item.ma_quan_huyen &&
+                    e.ten_phuong_xa == e.ten_phuong_xa
+            ) == pos
+        );
     });
 
     await prisma.phuong_xa.createMany({ data: result });
@@ -99,6 +135,7 @@ const seedPhong = async () => {
             so_luong_nguoi: Math.floor(Math.random() * 9) + 1,
             dien_tich_phong: Math.floor(Math.random() * 300) + 20,
             gia_thue: Math.floor(Math.random() * 20_000_000) + 500_000,
+            mo_ta_them: faker.lorem.words(100),
             ma_chu_phong:
                 chuPhong[Math.floor(Math.random() * chuPhong.length)]
                     .ma_chu_phong,
@@ -109,10 +146,16 @@ const seedPhong = async () => {
 };
 
 const seedDichVu = async () => {
-    const result = Array.from(Array(300)).map((_) => {
+    let result = Array.from(Array(300)).map((_) => {
         return {
             ten_dich_vu: faker.lorem.words(2),
         };
+    });
+
+    result = result.filter((item, pos) => {
+        return (
+            result.findIndex((e) => e.ten_dich_vu == item.ten_dich_vu) == pos
+        );
     });
 
     await prisma.dich_vu.createMany({ data: result });
@@ -131,15 +174,14 @@ const seedCtDichVu = async () => {
         };
     });
 
-    let insertedPK: string[] = [];
-
-    result = result.filter((item) => {
-        const inserted = insertedPK.includes(
-            `${item.ma_phong}, ${item.ma_dich_vu}`
+    result = result.filter((item, pos) => {
+        return (
+            result.findIndex(
+                (e) =>
+                    e.ma_dich_vu == item.ma_dich_vu &&
+                    e.ma_phong == item.ma_phong
+            ) == pos
         );
-        if (!inserted) insertedPK.push(`${item.ma_phong}, ${item.ma_dich_vu}`);
-
-        return !inserted;
     });
 
     await prisma.ct_dich_vu.createMany({
@@ -148,13 +190,19 @@ const seedCtDichVu = async () => {
 };
 
 const seedThietBi = async () => {
-    Array.from(Array(300)).forEach(async (_) => {
-        await prisma.thiet_bi.create({
-            data: {
-                ten_thiet_bi: faker.lorem.words(2),
-            },
-        });
+    let result = Array.from(Array(300)).map((_) => {
+        return {
+            ten_thiet_bi: faker.lorem.words(2),
+        };
     });
+
+    result = result.filter((item, pos) => {
+        return (
+            result.findIndex((e) => e.ten_thiet_bi == item.ten_thiet_bi) == pos
+        );
+    });
+
+    await prisma.thiet_bi.createMany({ data: result });
 };
 
 const seedCtThietBi = async () => {
@@ -170,16 +218,16 @@ const seedCtThietBi = async () => {
         };
     });
 
-    let insertedPK: string[] = [];
-
-    result = result.filter((item) => {
-        const inserted = insertedPK.includes(
-            `${item.ma_phong}, ${item.ma_thiet_bi}`
+    result = result.filter((item, pos) => {
+        return (
+            result.findIndex(
+                (e) =>
+                    e.ma_phong == item.ma_phong &&
+                    e.ma_thiet_bi == item.ma_thiet_bi
+            ) == pos
         );
-        if (!inserted) insertedPK.push(`${item.ma_phong}, ${item.ma_thiet_bi}`);
-        
-        return !inserted;
     });
+
     await prisma.ct_thiet_bi.createMany({
         data: result,
     });
@@ -189,7 +237,7 @@ const seedYeuCauXem = async () => {
     const phong = await prisma.phong.findMany();
     const nguoiTimPhong = await prisma.nguoi_tim_phong.findMany();
 
-    const result = Array.from(Array(100)).map((_) => {
+    let result = Array.from(Array(100)).map((_) => {
         return {
             ma_phong: phong[Math.floor(Math.random() * phong.length)].ma_phong,
             ma_nguoi_tim_phong:
@@ -203,14 +251,25 @@ const seedYeuCauXem = async () => {
         };
     });
 
-    await prisma.yeu_cau_xem_phong.createMany({ data: result });
+    result = result.filter((item, pos) => {
+        return (
+            result.findIndex(
+                (e) =>
+                    e.ma_nguoi_tim_phong == item.ma_nguoi_tim_phong &&
+                    e.ma_phong == item.ma_phong &&
+                    e.ngay_gio_yeu_cau == item.ngay_gio_yeu_cau
+            ) == pos
+        );
+    });
+
+    await prisma.ct_xem_phong.createMany({ data: result });
 };
 
 const seedCtThuePhong = async () => {
     const phong = await prisma.phong.findMany();
     const nguoiTimPhong = await prisma.nguoi_tim_phong.findMany();
 
-    const result = Array.from(Array(100)).map((_) => {
+    let result = Array.from(Array(100)).map((_) => {
         return {
             ma_phong: phong[Math.floor(Math.random() * phong.length)].ma_phong,
             ma_nguoi_tim_phong:
@@ -223,6 +282,23 @@ const seedCtThuePhong = async () => {
         };
     });
 
+    result = result.filter((item, pos) => {
+        return (
+            result.findIndex(
+                (e) =>
+                    e.ma_nguoi_tim_phong == item.ma_nguoi_tim_phong &&
+                    e.ma_phong == item.ma_phong &&
+                    e.ngay_gio_yeu_cau == item.ngay_gio_yeu_cau
+            ) == pos
+        );
+    });
+
+    result = result.filter((item, pos) => {
+        if (item.trang_thai != 'Đồng ý') return true;
+
+        return result.findIndex((e) => e.ma_phong == item.ma_phong) == pos;
+    });
+
     await prisma.ct_thue_phong.createMany({
         data: result,
     });
@@ -230,7 +306,7 @@ const seedCtThuePhong = async () => {
 
 const seed = async () => {
     await prisma.ct_thue_phong.deleteMany();
-    await prisma.yeu_cau_xem_phong.deleteMany();
+    await prisma.ct_xem_phong.deleteMany();
     await prisma.ct_thiet_bi.deleteMany();
     await prisma.thiet_bi.deleteMany();
     await prisma.ct_dich_vu.deleteMany();

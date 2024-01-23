@@ -6,3 +6,127 @@ datasource db {
   provider = "sqlserver"
   url      = env("DATABASE_URL")
 }
+
+model chu_phong {
+  ma_chu_phong  Int      @id(map: "PK__chu_phon__A5916EDC35098D7E") @default(autoincrement())
+  ho_dem        String   @db.NVarChar(255)
+  ten           String   @db.NVarChar(255)
+  so_can_cuoc   BigInt   @unique(map: "UQ__chu_phon__1FDCFBB714479623")
+  gioi_tinh     String   @db.NVarChar(4)
+  ngay_sinh     DateTime @db.Date
+  email         String   @db.NVarChar(255)
+  so_dien_thoai BigInt
+  phong         phong[]
+}
+
+model ct_dich_vu {
+  ma_dich_vu Int
+  ma_phong   Int
+  gia        Int
+  dich_vu    dich_vu @relation(fields: [ma_dich_vu], references: [ma_dich_vu], onUpdate: NoAction, map: "FK__ct_dich_v__ma_di__5441852A")
+  phong      phong   @relation(fields: [ma_phong], references: [ma_phong], onUpdate: NoAction, map: "FK__ct_dich_v__ma_ph__5535A963")
+
+  @@id([ma_dich_vu, ma_phong], map: "PK__ct_dich___DB60E2D92B8615FD")
+}
+
+model ct_thiet_bi {
+  ma_thiet_bi Int
+  ma_phong    Int
+  so_luong    Int
+  phong       phong    @relation(fields: [ma_phong], references: [ma_phong], onUpdate: NoAction, map: "FK__ct_thiet___ma_ph__5CD6CB2B")
+  thiet_bi    thiet_bi @relation(fields: [ma_thiet_bi], references: [ma_thiet_bi], onUpdate: NoAction, map: "FK__ct_thiet___ma_th__5BE2A6F2")
+
+  @@id([ma_thiet_bi, ma_phong], map: "PK__ct_thiet__59E4DD8DEE7662D6")
+}
+
+model ct_thue_phong {
+  ma_phong           Int
+  ma_nguoi_tim_phong Int
+  ngay_gio_yeu_cau   DateTime        @db.DateTime
+  trang_thai         String          @db.NVarChar(10)
+  nguoi_tim_phong    nguoi_tim_phong @relation(fields: [ma_nguoi_tim_phong], references: [ma_nguoi_tim_phong], onUpdate: NoAction, map: "FK__ct_thue_p__ma_ng__6754599E")
+  phong              phong           @relation(fields: [ma_phong], references: [ma_phong], onUpdate: NoAction, map: "FK__ct_thue_p__ma_ph__66603565")
+
+  @@id([ma_phong, ma_nguoi_tim_phong, ngay_gio_yeu_cau], map: "PK__ct_thue___E65FCE5194B86307")
+}
+
+model ct_xem_phong {
+  ma_phong           Int
+  ma_nguoi_tim_phong Int
+  ngay_gio_yeu_cau   DateTime        @db.DateTime
+  ngay_gio_hen       DateTime        @db.DateTime
+  trang_thai         String          @db.NVarChar(10)
+  nguoi_tim_phong    nguoi_tim_phong @relation(fields: [ma_nguoi_tim_phong], references: [ma_nguoi_tim_phong], onUpdate: NoAction, map: "FK__ct_xem_ph__ma_ng__628FA481")
+  phong              phong           @relation(fields: [ma_phong], references: [ma_phong], onUpdate: NoAction, map: "FK__ct_xem_ph__ma_ph__619B8048")
+
+  @@id([ma_phong, ma_nguoi_tim_phong, ngay_gio_yeu_cau], map: "PK__ct_xem_p__E65FCE5169201256")
+}
+
+model dich_vu {
+  ma_dich_vu  Int          @id(map: "PK__dich_vu__5ADDD34574AAA024") @default(autoincrement())
+  ten_dich_vu String       @unique(map: "UQ__dich_vu__250961CD722363A8") @db.NVarChar(255)
+  ct_dich_vu  ct_dich_vu[]
+}
+
+model nguoi_tim_phong {
+  ma_nguoi_tim_phong Int             @id(map: "PK__nguoi_ti__E7B5E6D289E015F1") @default(autoincrement())
+  ho_dem             String          @db.NVarChar(255)
+  ten                String          @db.NVarChar(255)
+  so_can_cuoc        BigInt          @unique(map: "UQ__nguoi_ti__1FDCFBB7A85B5599")
+  gioi_tinh          String          @db.NVarChar(4)
+  ngay_sinh          DateTime        @db.Date
+  email              String          @db.NVarChar(255)
+  so_dien_thoai      BigInt
+  ct_thue_phong      ct_thue_phong[]
+  ct_xem_phong       ct_xem_phong[]
+}
+
+model phong {
+  ma_phong        Int             @id(map: "PK__phong__1BD319C93A71D9DB") @default(autoincrement())
+  ten_phong       String          @db.NVarChar(255)
+  so_nha          String          @db.NVarChar(255)
+  ma_phuong_xa    Int
+  so_luong_nguoi  Int
+  dien_tich_phong Float
+  gia_thue        Float
+  ma_chu_phong    Int
+  mo_ta_them      String?         @db.NVarChar(Max)
+  ct_dich_vu      ct_dich_vu[]
+  ct_thiet_bi     ct_thiet_bi[]
+  ct_thue_phong   ct_thue_phong[]
+  ct_xem_phong    ct_xem_phong[]
+  chu_phong       chu_phong       @relation(fields: [ma_chu_phong], references: [ma_chu_phong], onUpdate: NoAction, map: "FK__phong__ma_chu_ph__4D94879B")
+  phuong_xa       phuong_xa       @relation(fields: [ma_phuong_xa], references: [ma_phuong_xa], onUpdate: NoAction, map: "FK__phong__ma_phuong__4CA06362")
+}
+
+model phuong_xa {
+  ma_phuong_xa  Int        @id(map: "PK__phuong_x__21D5495BEE577EFE") @default(autoincrement())
+  ten_phuong_xa String     @db.NVarChar(255)
+  ma_quan_huyen Int
+  phong         phong[]
+  quan_huyen    quan_huyen @relation(fields: [ma_quan_huyen], references: [ma_quan_huyen], onUpdate: NoAction, map: "FK__phuong_xa__ma_qu__46E78A0C")
+
+  @@unique([ten_phuong_xa, ma_quan_huyen], map: "UQ__phuong_x__06776703F37CFED7")
+}
+
+model quan_huyen {
+  ma_quan_huyen  Int         @id(map: "PK__quan_huy__9497ED38F00745CD") @default(autoincrement())
+  ten_quan_huyen String      @db.NVarChar(255)
+  ma_tinh        Int
+  phuong_xa      phuong_xa[]
+  tinh           tinh        @relation(fields: [ma_tinh], references: [ma_tinh], onUpdate: NoAction, map: "FK__quan_huye__ma_ti__4316F928")
+
+  @@unique([ten_quan_huyen, ma_tinh], map: "UQ__quan_huy__92E22A99DC63498D")
+}
+
+model thiet_bi {
+  ma_thiet_bi  Int           @id(map: "PK__thiet_bi__D859EC110A3DD1A9") @default(autoincrement())
+  ten_thiet_bi String        @unique(map: "UQ__thiet_bi__9CECF4BF87D196BE") @db.NVarChar(255)
+  ct_thiet_bi  ct_thiet_bi[]
+}
+
+model tinh {
+  ma_tinh    Int          @id(map: "PK__tinh__0349B248FD58FC10") @default(autoincrement())
+  ten_tinh   String       @unique(map: "UQ__tinh__9DC892914E575051") @db.NVarChar(255)
+  quan_huyen quan_huyen[]
+}
