@@ -63,3 +63,7 @@ Gồm:
   - Đọc thông tin của người tìm trọ yêu cầu hẹn xem phòng / yêu cầu thuê
   - Chấp nhận, từ chối yêu cầu đặt lịch hẹn xem phòng
   - Chấp nhận, từ chối yêu cầu thuê phòng
+
+## Sơ đồ ERD
+
+![diagram](diagram.png)
