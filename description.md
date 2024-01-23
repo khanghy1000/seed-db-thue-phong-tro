@@ -2,6 +2,8 @@
 
 ## Khảo sát thực tế
 
+- Database sẽ cho phép nhiều người khác nhau đăng phòng cho thuê. Người tìm phòng có thể tìm và yêu cầu thuê các phòng này.
+
 - Có nhiều người tìm phòng, mỗi người tìm phòng sẽ có mã riêng, họ đệm, tên, số căn cước, giới tính, ngày sinh, email, số điện thoại.
 
 - Có nhiều chủ trọ cho thuê phòng, mỗi chủ trọ sẽ có mã riêng, họ đệm, tên, số căn cước, giới tính, ngày sinh, email, số điện thoại.
