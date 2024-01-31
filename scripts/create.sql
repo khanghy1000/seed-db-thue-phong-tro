@@ -12,7 +12,27 @@ DROP TABLE IF EXISTS tinh;
 DROP TABLE IF EXISTS chu_phong;
 DROP TABLE IF EXISTS nguoi_tim_phong;
 DROP TABLE IF EXISTS nguoi_thue;
+DROP TABLE IF EXISTS username;
+DROP TABLE IF EXISTS role;
 
+CREATE TABLE role (
+    ma_role  INT           NOT NULL IDENTITY (1, 1) PRIMARY KEY,
+    ten_role NVARCHAR(100) NOT NULL,
+
+    UNIQUE (ten_role)
+)
+
+INSERT INTO role (ten_role)
+VALUES ('CHU_PHONG'),
+       ('NGUOI_TIM_PHONG')
+
+CREATE TABLE username (
+    username NVARCHAR(100) NOT NULL PRIMARY KEY,
+    password NVARCHAR(255) NOT NULL,
+    ma_role  INT           NOT NULL,
+
+    FOREIGN KEY (ma_role) REFERENCES role (ma_role)
+)
 
 CREATE TABLE nguoi_tim_phong (
     ma_nguoi_tim_phong INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
@@ -23,9 +43,12 @@ CREATE TABLE nguoi_tim_phong (
     ngay_sinh          DATE          NOT NULL,
     email              NVARCHAR(255) NOT NULL,
     so_dien_thoai      BIGINT        NOT NULL,
+    username           NVARCHAR(100) NOT NULL,
 
     UNIQUE (so_can_cuoc),
-    CHECK (gioi_tinh = N'Nam' OR gioi_tinh = N'Nữ' OR gioi_tinh = N'Khác')
+    CHECK (gioi_tinh = N'Nam' OR gioi_tinh = N'Nữ' OR gioi_tinh = N'Khác'),
+
+    FOREIGN KEY (username) REFERENCES username (username)
 )
 
 CREATE TABLE chu_phong (
@@ -37,9 +60,12 @@ CREATE TABLE chu_phong (
     ngay_sinh     DATE          NOT NULL,
     email         NVARCHAR(255) NOT NULL,
     so_dien_thoai BIGINT        NOT NULL,
+    username      NVARCHAR(100) NOT NULL,
 
     UNIQUE (so_can_cuoc),
-    CHECK (gioi_tinh = N'Nam' OR gioi_tinh = N'Nữ' OR gioi_tinh = N'Khác')
+    CHECK (gioi_tinh = N'Nam' OR gioi_tinh = N'Nữ' OR gioi_tinh = N'Khác'),
+
+    FOREIGN KEY (username) REFERENCES username (username)
 )
 
 CREATE TABLE tinh (
@@ -78,7 +104,7 @@ CREATE TABLE phong (
     dien_tich_phong FLOAT         NOT NULL,
     gia_thue        FLOAT         NOT NULL,
     ma_chu_phong    INT           NOT NULL,
-    mo_ta_them      NVARCHAR(max),
+    mo_ta_them      NVARCHAR(MAX),
 
     CHECK (so_luong_nguoi > 0),
     CHECK (dien_tich_phong > 0),
@@ -92,7 +118,7 @@ CREATE TABLE dich_vu (
     ma_dich_vu  INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
     ten_dich_vu NVARCHAR(255) NOT NULL,
 
-    UNIQUE(ten_dich_vu)
+    UNIQUE (ten_dich_vu)
 )
 
 CREATE TABLE ct_dich_vu (
@@ -111,7 +137,7 @@ CREATE TABLE thiet_bi (
     ma_thiet_bi  INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
     ten_thiet_bi NVARCHAR(255) NOT NULL,
 
-    UNIQUE(ten_thiet_bi)
+    UNIQUE (ten_thiet_bi)
 )
 
 CREATE TABLE ct_thiet_bi (
