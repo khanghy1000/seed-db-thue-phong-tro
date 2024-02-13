@@ -24,7 +24,8 @@ CREATE TABLE role (
 
 INSERT INTO role (ten_role)
 VALUES ('CHU_PHONG'),
-       ('NGUOI_TIM_PHONG')
+       ('NGUOI_TIM_PHONG'),
+       ('ADMIN')
 
 CREATE TABLE username (
     username NVARCHAR(100) NOT NULL PRIMARY KEY,
