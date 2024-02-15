@@ -9,6 +9,8 @@
 
 - Có nhiều chủ trọ cho thuê phòng, mỗi chủ trọ sẽ có mã riêng, họ đệm, tên, số căn cước, giới tính, ngày sinh, email, số điện thoại. Số căn cước không được trùng nhau.
 
+- Người tìm phòng và chủ trọ có thể đăng nhập và thực hiện các chức năng dựa vào role của mình.
+
 - Chủ trọ có thể đăng cho thuê nhiều phòng, mỗi phòng chỉ thuộc 1 chủ trọ. Mỗi phòng trọ sẽ có mã phòng riêng, tên phòng, địa chỉ nhà, số lượng người tối đa, diện tích phòng, giá thuê và phần mô tả thêm.
 
 - Chủ trọ có thể chỉnh sửa thông tin các phòng trọ mà mình đã đăng. Chủ trọ chỉ có thể xoá phòng trọ đã đăng nếu như phòng trọ đó chưa có yêu cầu thuê nào được đồng ý.
@@ -49,6 +51,7 @@ Gồm:
 ### Các chức năng của từng đối tượng
 
 - Người tìm phòng:
+  - Chỉnh sửa thông tin cá nhân
   - Tìm phòng trọ
   - Đọc thông tin phòng trọ
   - Đọc thông tin chủ phòng trọ
@@ -56,7 +59,8 @@ Gồm:
   - Yêu cầu thuê
 
 - Chủ phòng trọ:
-  - Đăng phòng trọ
+  - Chỉnh sửa thông tin cá nhân
+  - Đăng phòng trọ cho thuê
   - Đọc thông tin phòng trọ
   - Chỉnh sửa thông tin phòng trọ đã đăng
   - Xoá phòng trọ đã đăng
