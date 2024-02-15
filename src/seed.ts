@@ -27,6 +27,7 @@ const seed = async () => {
     await prisma.tinh.deleteMany();
     await prisma.chu_phong.deleteMany();
     await prisma.nguoi_tim_phong.deleteMany();
+    await prisma.username.deleteMany();
 
     await seedTinh();
     await seedChuPhong();
