@@ -1,10 +1,10 @@
-import {faker} from "@faker-js/faker";
-import {prisma} from "../seed";
+import { faker } from '@faker-js/faker';
+import { prisma } from '../seed';
 
-export const seedChuPhong = async () => {
-    let roleChuPhong = (await prisma.role.findFirst({
+export const seedChuTro = async () => {
+    let roleChuTro = (await prisma.role.findFirst({
         where: {
-            ten_role: 'CHU_PHONG',
+            ten_role: 'CHU_TRO',
         },
     })) as { ma_role: number; ten_role: string };
 
@@ -25,7 +25,7 @@ export const seedChuPhong = async () => {
             }),
             username: faker.internet.userName(),
             password: '123456',
-            ma_role: roleChuPhong.ma_role,
+            ma_role: roleChuTro.ma_role,
         };
     });
 
@@ -39,16 +39,15 @@ export const seedChuPhong = async () => {
         );
     });
 
-    const resultUsername = result.map(({username, password, ma_role}) => ({
+    const resultUsername = result.map(({ username, password, ma_role }) => ({
         username,
         password,
         ma_role,
     }));
     const resultChuPhong = result.map(
-        ({password, ma_role, ...remain}) => remain
+        ({ password, ma_role, ...remain }) => remain
     );
 
-    await prisma.username.createMany({data: resultUsername});
-    await prisma.chu_phong.createMany({data: resultChuPhong});
-
+    await prisma.dang_nhap.createMany({ data: resultUsername });
+    await prisma.chu_tro.createMany({ data: resultChuPhong });
 };

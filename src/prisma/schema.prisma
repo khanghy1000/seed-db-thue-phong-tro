@@ -7,38 +7,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model chu_phong {
-  ma_chu_phong                          Int      @id(map: "PK__chu_phon__A5916EDC97534725") @default(autoincrement())
-  ho_dem                                String   @db.NVarChar(255)
-  ten                                   String   @db.NVarChar(255)
-  so_can_cuoc                           BigInt   @unique(map: "UQ__chu_phon__1FDCFBB7084E0B93")
-  gioi_tinh                             String   @db.NVarChar(4)
-  ngay_sinh                             DateTime @db.Date
-  email                                 String   @db.NVarChar(255)
-  so_dien_thoai                         BigInt
-  username                              String   @db.NVarChar(100)
-  username_chu_phong_usernameTousername username @relation("chu_phong_usernameTousername", fields: [username], references: [username], onUpdate: NoAction, map: "FK__chu_phong__usern__41EDCAC5")
-  phong                                 phong[]
+model chu_tro {
+  ma_chu_tro                          Int       @id(map: "PK__chu_tro__1673059F9EBD11A8") @default(autoincrement())
+  ho_dem                              String    @db.NVarChar(255)
+  ten                                 String    @db.NVarChar(255)
+  so_can_cuoc                         BigInt    @unique(map: "UQ__chu_tro__1FDCFBB7A9383243")
+  gioi_tinh                           String    @db.NVarChar(4)
+  ngay_sinh                           DateTime  @db.Date
+  email                               String    @db.NVarChar(255)
+  so_dien_thoai                       BigInt
+  username                            String    @db.NVarChar(100)
+  username_chu_tro_usernameTousername dang_nhap @relation("chu_tro_usernameTousername", fields: [username], references: [username], onUpdate: NoAction, map: "FK__chu_tro__usernam__7BE56230")
+  phong                               phong[]
 }
 
 model ct_dich_vu {
   ma_dich_vu Int
   ma_phong   Int
   gia        Int
-  dich_vu    dich_vu @relation(fields: [ma_dich_vu], references: [ma_dich_vu], onUpdate: NoAction, map: "FK__ct_dich_v__ma_di__5441852A")
-  phong      phong   @relation(fields: [ma_phong], references: [ma_phong], onUpdate: NoAction, map: "FK__ct_dich_v__ma_ph__5535A963")
+  dich_vu    dich_vu @relation(fields: [ma_dich_vu], references: [ma_dich_vu], onUpdate: NoAction, map: "FK__ct_dich_v__ma_di__13BCEBC1")
+  phong      phong   @relation(fields: [ma_phong], references: [ma_phong], onUpdate: NoAction, map: "FK__ct_dich_v__ma_ph__14B10FFA")
 
-  @@id([ma_dich_vu, ma_phong], map: "PK__ct_dich___DB60E2D9590BBBBF")
+  @@id([ma_dich_vu, ma_phong], map: "PK__ct_dich___DB60E2D9B023C5B6")
 }
 
 model ct_thiet_bi {
   ma_thiet_bi Int
   ma_phong    Int
   so_luong    Int
-  phong       phong    @relation(fields: [ma_phong], references: [ma_phong], onUpdate: NoAction, map: "FK__ct_thiet___ma_ph__5CD6CB2B")
-  thiet_bi    thiet_bi @relation(fields: [ma_thiet_bi], references: [ma_thiet_bi], onUpdate: NoAction, map: "FK__ct_thiet___ma_th__5BE2A6F2")
+  phong       phong    @relation(fields: [ma_phong], references: [ma_phong], onUpdate: NoAction, map: "FK__ct_thiet___ma_ph__1C5231C2")
+  thiet_bi    thiet_bi @relation(fields: [ma_thiet_bi], references: [ma_thiet_bi], onUpdate: NoAction, map: "FK__ct_thiet___ma_th__1B5E0D89")
 
-  @@id([ma_thiet_bi, ma_phong], map: "PK__ct_thiet__59E4DD8DFE5010E2")
+  @@id([ma_thiet_bi, ma_phong], map: "PK__ct_thiet__59E4DD8D05653C6E")
 }
 
 model ct_thue_phong {
@@ -46,10 +46,10 @@ model ct_thue_phong {
   ma_nguoi_tim_phong Int
   ngay_gio_yeu_cau   DateTime        @db.DateTime
   trang_thai         String          @db.NVarChar(10)
-  nguoi_tim_phong    nguoi_tim_phong @relation(fields: [ma_nguoi_tim_phong], references: [ma_nguoi_tim_phong], onUpdate: NoAction, map: "FK__ct_thue_p__ma_ng__6754599E")
-  phong              phong           @relation(fields: [ma_phong], references: [ma_phong], onUpdate: NoAction, map: "FK__ct_thue_p__ma_ph__66603565")
+  nguoi_tim_phong    nguoi_tim_phong @relation(fields: [ma_nguoi_tim_phong], references: [ma_nguoi_tim_phong], onUpdate: NoAction, map: "FK__ct_thue_p__ma_ng__26CFC035")
+  phong              phong           @relation(fields: [ma_phong], references: [ma_phong], onUpdate: NoAction, map: "FK__ct_thue_p__ma_ph__25DB9BFC")
 
-  @@id([ma_phong, ma_nguoi_tim_phong, ngay_gio_yeu_cau], map: "PK__ct_thue___E65FCE51885FED0F")
+  @@id([ma_phong, ma_nguoi_tim_phong, ngay_gio_yeu_cau], map: "PK__ct_thue___E65FCE51ED66928B")
 }
 
 model ct_xem_phong {
@@ -58,23 +58,23 @@ model ct_xem_phong {
   ngay_gio_yeu_cau   DateTime        @db.DateTime
   ngay_gio_hen       DateTime        @db.DateTime
   trang_thai         String          @db.NVarChar(10)
-  nguoi_tim_phong    nguoi_tim_phong @relation(fields: [ma_nguoi_tim_phong], references: [ma_nguoi_tim_phong], onUpdate: NoAction, map: "FK__ct_xem_ph__ma_ng__628FA481")
-  phong              phong           @relation(fields: [ma_phong], references: [ma_phong], onUpdate: NoAction, map: "FK__ct_xem_ph__ma_ph__619B8048")
+  nguoi_tim_phong    nguoi_tim_phong @relation(fields: [ma_nguoi_tim_phong], references: [ma_nguoi_tim_phong], onUpdate: NoAction, map: "FK__ct_xem_ph__ma_ng__220B0B18")
+  phong              phong           @relation(fields: [ma_phong], references: [ma_phong], onUpdate: NoAction, map: "FK__ct_xem_ph__ma_ph__2116E6DF")
 
-  @@id([ma_phong, ma_nguoi_tim_phong, ngay_gio_yeu_cau], map: "PK__ct_xem_p__E65FCE51FF2A2F70")
+  @@id([ma_phong, ma_nguoi_tim_phong, ngay_gio_yeu_cau], map: "PK__ct_xem_p__E65FCE5156A4F10A")
 }
 
 model dich_vu {
-  ma_dich_vu  Int          @id(map: "PK__dich_vu__5ADDD34524C3DAD7") @default(autoincrement())
-  ten_dich_vu String       @unique(map: "UQ__dich_vu__250961CD97675F85") @db.NVarChar(255)
+  ma_dich_vu  Int          @id(map: "PK__dich_vu__5ADDD345BF297BDC") @default(autoincrement())
+  ten_dich_vu String       @unique(map: "UQ__dich_vu__250961CD8E99281E") @db.NVarChar(255)
   ct_dich_vu  ct_dich_vu[]
 }
 
 model nguoi_tim_phong {
-  ma_nguoi_tim_phong                          Int             @id(map: "PK__nguoi_ti__E7B5E6D2EDED56C3") @default(autoincrement())
+  ma_nguoi_tim_phong                          Int             @id(map: "PK__nguoi_ti__E7B5E6D2F77899CF") @default(autoincrement())
   ho_dem                                      String          @db.NVarChar(255)
   ten                                         String          @db.NVarChar(255)
-  so_can_cuoc                                 BigInt          @unique(map: "UQ__nguoi_ti__1FDCFBB7C0539AD9")
+  so_can_cuoc                                 BigInt          @unique(map: "UQ__nguoi_ti__1FDCFBB777F50651")
   gioi_tinh                                   String          @db.NVarChar(4)
   ngay_sinh                                   DateTime        @db.Date
   email                                       String          @db.NVarChar(255)
@@ -82,80 +82,70 @@ model nguoi_tim_phong {
   username                                    String          @db.NVarChar(100)
   ct_thue_phong                               ct_thue_phong[]
   ct_xem_phong                                ct_xem_phong[]
-  username_nguoi_tim_phong_usernameTousername username        @relation("nguoi_tim_phong_usernameTousername", fields: [username], references: [username], onUpdate: NoAction, map: "FK__nguoi_tim__usern__3D2915A8")
+  username_nguoi_tim_phong_usernameTousername dang_nhap       @relation("nguoi_tim_phong_usernameTousername", fields: [username], references: [username], onUpdate: NoAction, map: "FK__nguoi_tim__usern__7720AD13")
 }
 
 model phong {
-  ma_phong        Int             @id(map: "PK__phong__1BD319C9B6E495F1") @default(autoincrement())
+  ma_phong        Int             @id(map: "PK__phong__1BD319C97D37A63E") @default(autoincrement())
   ten_phong       String          @db.NVarChar(255)
   so_nha          String          @db.NVarChar(255)
   ma_phuong_xa    Int
   so_luong_nguoi  Int
   dien_tich_phong Float
   gia_thue        Float
-  ma_chu_phong    Int
+  ma_chu_tro      Int
   mo_ta_them      String?         @db.NVarChar(Max)
   ct_dich_vu      ct_dich_vu[]
   ct_thiet_bi     ct_thiet_bi[]
   ct_thue_phong   ct_thue_phong[]
   ct_xem_phong    ct_xem_phong[]
-  chu_phong       chu_phong       @relation(fields: [ma_chu_phong], references: [ma_chu_phong], onUpdate: NoAction, map: "FK__phong__ma_chu_ph__4D94879B")
-  phuong_xa       phuong_xa       @relation(fields: [ma_phuong_xa], references: [ma_phuong_xa], onUpdate: NoAction, map: "FK__phong__ma_phuong__4CA06362")
+  chu_tro         chu_tro         @relation(fields: [ma_chu_tro], references: [ma_chu_tro], onUpdate: NoAction, map: "FK__phong__ma_chu_tr__0D0FEE32")
+  phuong_xa       phuong_xa       @relation(fields: [ma_phuong_xa], references: [ma_phuong_xa], onUpdate: NoAction, map: "FK__phong__ma_phuong__0C1BC9F9")
 }
 
 model phuong_xa {
-  ma_phuong_xa  Int        @id(map: "PK__phuong_x__21D5495B6B4D2E55") @default(autoincrement())
+  ma_phuong_xa  Int        @id(map: "PK__phuong_x__21D5495B8A1B362C") @default(autoincrement())
   ten_phuong_xa String     @db.NVarChar(255)
   ma_quan_huyen Int
   phong         phong[]
-  quan_huyen    quan_huyen @relation(fields: [ma_quan_huyen], references: [ma_quan_huyen], onUpdate: NoAction, map: "FK__phuong_xa__ma_qu__46E78A0C")
+  quan_huyen    quan_huyen @relation(fields: [ma_quan_huyen], references: [ma_quan_huyen], onUpdate: NoAction, map: "FK__phuong_xa__ma_qu__0662F0A3")
 
-  @@unique([ten_phuong_xa, ma_quan_huyen], map: "UQ__phuong_x__0677670319FE9FA6")
+  @@unique([ten_phuong_xa, ma_quan_huyen], map: "UQ__phuong_x__0677670309DF80A9")
 }
 
 model quan_huyen {
-  ma_quan_huyen  Int         @id(map: "PK__quan_huy__9497ED38B2B370B8") @default(autoincrement())
+  ma_quan_huyen  Int         @id(map: "PK__quan_huy__9497ED3890E9D72A") @default(autoincrement())
   ten_quan_huyen String      @db.NVarChar(255)
   ma_tinh        Int
   phuong_xa      phuong_xa[]
-  tinh           tinh        @relation(fields: [ma_tinh], references: [ma_tinh], onUpdate: NoAction, map: "FK__quan_huye__ma_ti__4316F928")
+  tinh           tinh        @relation(fields: [ma_tinh], references: [ma_tinh], onUpdate: NoAction, map: "FK__quan_huye__ma_ti__02925FBF")
 
-  @@unique([ten_quan_huyen, ma_tinh], map: "UQ__quan_huy__92E22A99249D4806")
+  @@unique([ten_quan_huyen, ma_tinh], map: "UQ__quan_huy__92E22A99DD4B9E8C")
+}
+
+model role {
+  ma_role   Int         @id(map: "PK__role__0C4F516CBAC6FA80") @default(autoincrement())
+  ten_role  String      @unique(map: "UQ__role__6F503159B9134C92") @db.NVarChar(100)
+  dang_nhap dang_nhap[]
 }
 
 model thiet_bi {
-  ma_thiet_bi  Int           @id(map: "PK__thiet_bi__D859EC11F75E5EE4") @default(autoincrement())
-  ten_thiet_bi String        @unique(map: "UQ__thiet_bi__9CECF4BF378BC62C") @db.NVarChar(255)
+  ma_thiet_bi  Int           @id(map: "PK__thiet_bi__D859EC11835429F2") @default(autoincrement())
+  ten_thiet_bi String        @unique(map: "UQ__thiet_bi__9CECF4BF0D659F95") @db.NVarChar(255)
   ct_thiet_bi  ct_thiet_bi[]
 }
 
 model tinh {
-  ma_tinh    Int          @id(map: "PK__tinh__0349B2482BF05407") @default(autoincrement())
-  ten_tinh   String       @unique(map: "UQ__tinh__9DC89291C434FB60") @db.NVarChar(255)
+  ma_tinh    Int          @id(map: "PK__tinh__0349B248CD77D161") @default(autoincrement())
+  ten_tinh   String       @unique(map: "UQ__tinh__9DC89291D96EF57E") @db.NVarChar(255)
   quan_huyen quan_huyen[]
 }
 
-model role {
-  ma_role  Int        @id(map: "PK__role__0C4F516C585E4230") @default(autoincrement())
-  ten_role String     @unique(map: "UQ__role__6F50315992B83F84") @db.NVarChar(100)
-  username username[]
-}
-
-model sysdiagrams {
-  name         String @db.NVarChar(128)
-  principal_id Int
-  diagram_id   Int    @id(map: "PK__sysdiagr__C2B05B615B8FA718") @default(autoincrement())
-  version      Int?
-  definition   Bytes?
-
-  @@unique([principal_id, name], map: "UK_principal_name")
-}
-
-model username {
-  username                                           String            @id(map: "PK__username__F3DBC57351BFDC28") @db.NVarChar(100)
+model dang_nhap {
+  username                                           String            @id(map: "PK__dang_nha__F3DBC573A343B59B") @db.NVarChar(100)
   password                                           String            @db.NVarChar(255)
   ma_role                                            Int
-  chu_phong_chu_phong_usernameTousername             chu_phong[]       @relation("chu_phong_usernameTousername")
+  chu_tro_chu_tro_usernameTousername                 chu_tro[]         @relation("chu_tro_usernameTousername")
+  role                                               role              @relation(fields: [ma_role], references: [ma_role], onUpdate: NoAction, map: "FK__dang_nhap__ma_ro__2C88998B")
   nguoi_tim_phong_nguoi_tim_phong_usernameTousername nguoi_tim_phong[] @relation("nguoi_tim_phong_usernameTousername")
-  role                                               role              @relation(fields: [ma_role], references: [ma_role], onUpdate: NoAction, map: "FK__username__ma_rol__3864608B")
 }

@@ -1,19 +1,29 @@
-DROP TABLE IF EXISTS ct_thue_phong;
-DROP TABLE IF EXISTS yeu_cau_xem_phong;
-DROP TABLE IF EXISTS ct_xem_phong;
-DROP TABLE IF EXISTS ct_thiet_bi;
-DROP TABLE IF EXISTS thiet_bi;
-DROP TABLE IF EXISTS ct_dich_vu;
-DROP TABLE IF EXISTS dich_vu;
-DROP TABLE IF EXISTS phong;
-DROP TABLE IF EXISTS phuong_xa;
-DROP TABLE IF EXISTS quan_huyen;
-DROP TABLE IF EXISTS tinh;
-DROP TABLE IF EXISTS chu_phong;
-DROP TABLE IF EXISTS nguoi_tim_phong;
-DROP TABLE IF EXISTS nguoi_thue;
-DROP TABLE IF EXISTS username;
-DROP TABLE IF EXISTS role;
+-- DELELE ALL USER TABLES
+
+DECLARE @Sql NVARCHAR(500) DECLARE @Cursor CURSOR
+
+SET @Cursor = CURSOR FAST_FORWARD FOR
+    SELECT DISTINCT sql = 'ALTER TABLE [' + tc2.TABLE_SCHEMA + '].[' + tc2.TABLE_NAME + '] DROP [' +
+                          rc1.CONSTRAINT_NAME + '];'
+    FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS rc1
+             LEFT JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc2 ON tc2.CONSTRAINT_NAME = rc1.CONSTRAINT_NAME
+
+OPEN @Cursor FETCH NEXT FROM @Cursor INTO @Sql
+
+WHILE (@@FETCH_STATUS = 0)
+    BEGIN
+        EXEC sp_executesql @Sql
+        FETCH NEXT FROM @Cursor INTO @Sql
+    END
+
+CLOSE @Cursor DEALLOCATE @Cursor
+GO
+
+EXEC sp_MSforeachtable 'DROP TABLE ?'
+GO
+
+-------------------------
+
 
 CREATE TABLE role (
     ma_role  INT           NOT NULL IDENTITY (1, 1) PRIMARY KEY,
@@ -23,11 +33,11 @@ CREATE TABLE role (
 )
 
 INSERT INTO role (ten_role)
-VALUES ('CHU_PHONG'),
+VALUES ('CHU_TRO'),
        ('NGUOI_TIM_PHONG'),
        ('ADMIN')
 
-CREATE TABLE username (
+CREATE TABLE dang_nhap (
     username NVARCHAR(100) NOT NULL PRIMARY KEY,
     password NVARCHAR(255) NOT NULL,
     ma_role  INT           NOT NULL,
@@ -49,11 +59,11 @@ CREATE TABLE nguoi_tim_phong (
     UNIQUE (so_can_cuoc),
     CHECK (gioi_tinh = N'Nam' OR gioi_tinh = N'Nữ' OR gioi_tinh = N'Khác'),
 
-    FOREIGN KEY (username) REFERENCES username (username)
+    FOREIGN KEY (username) REFERENCES dang_nhap (username)
 )
 
-CREATE TABLE chu_phong (
-    ma_chu_phong  INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
+CREATE TABLE chu_tro (
+    ma_chu_tro    INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
     ho_dem        NVARCHAR(255) NOT NULL,
     ten           NVARCHAR(255) NOT NULL,
     so_can_cuoc   BIGINT        NOT NULL,
@@ -66,7 +76,7 @@ CREATE TABLE chu_phong (
     UNIQUE (so_can_cuoc),
     CHECK (gioi_tinh = N'Nam' OR gioi_tinh = N'Nữ' OR gioi_tinh = N'Khác'),
 
-    FOREIGN KEY (username) REFERENCES username (username)
+    FOREIGN KEY (username) REFERENCES dang_nhap (username)
 )
 
 CREATE TABLE tinh (
@@ -97,22 +107,26 @@ CREATE TABLE phuong_xa (
 )
 
 CREATE TABLE phong (
-    ma_phong        INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
-    ten_phong       NVARCHAR(255) NOT NULL,
-    so_nha          NVARCHAR(255) NOT NULL,
-    ma_phuong_xa    INT           NOT NULL,
-    so_luong_nguoi  INT           NOT NULL,
-    dien_tich_phong FLOAT         NOT NULL,
-    gia_thue        FLOAT         NOT NULL,
-    ma_chu_phong    INT           NOT NULL,
-    mo_ta_them      NVARCHAR(MAX),
+    ma_phong               INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
+    ten_phong              NVARCHAR(255) NOT NULL,
+    so_nha                 NVARCHAR(255) NOT NULL,
+    ma_phuong_xa           INT           NOT NULL,
+    so_luong_nguoi         INT           NOT NULL,
+    dien_tich_phong        FLOAT         NOT NULL,
+    gia_thue               FLOAT         NOT NULL,
+    tinh_trang_phong       NVARCHAR(255) NOT NULL,
+    ma_chu_tro             INT           NOT NULL,
+    ma_nguoi_thue_hien_tai INT,
+    trang_thai_an          BIT DEFAULT 0 NOT NULL,
+    mo_ta_them             NVARCHAR(MAX),
 
     CHECK (so_luong_nguoi > 0),
     CHECK (dien_tich_phong > 0),
     CHECK (gia_thue > 0),
 
     FOREIGN KEY (ma_phuong_xa) REFERENCES phuong_xa (ma_phuong_xa),
-    FOREIGN KEY (ma_chu_phong) REFERENCES chu_phong (ma_chu_phong),
+    FOREIGN KEY (ma_chu_tro) REFERENCES chu_tro (ma_chu_tro),
+    FOREIGN KEY (ma_nguoi_thue_hien_tai) REFERENCES nguoi_tim_phong (ma_nguoi_tim_phong)
 )
 
 CREATE TABLE dich_vu (
@@ -142,9 +156,10 @@ CREATE TABLE thiet_bi (
 )
 
 CREATE TABLE ct_thiet_bi (
-    ma_thiet_bi INT NOT NULL,
-    ma_phong    INT NOT NULL,
-    so_luong    INT NOT NULL,
+    ma_thiet_bi INT           NOT NULL,
+    ma_phong    INT           NOT NULL,
+    so_luong    INT           NOT NULL,
+    tinh_trang  NVARCHAR(255) NOT NULL,
 
     CHECK (so_luong > 0),
 
@@ -154,14 +169,16 @@ CREATE TABLE ct_thiet_bi (
     PRIMARY KEY (ma_thiet_bi, ma_phong)
 )
 
-CREATE TABLE ct_xem_phong (
-    ma_phong           INT          NOT NULL,
-    ma_nguoi_tim_phong INT          NOT NULL,
-    ngay_gio_yeu_cau   DATETIME     NOT NULL,
-    ngay_gio_hen       DATETIME     NOT NULL,
-    trang_thai         NVARCHAR(10) NOT NULL,
+CREATE TABLE ct_yeu_cau_xem_phong (
+    ma_phong           INT                        NOT NULL,
+    ma_nguoi_tim_phong INT                        NOT NULL,
+    ngay_gio_yeu_cau   DATETIME DEFAULT GETDATE() NOT NULL,
+    ngay_gio_hen       DATETIME                   NOT NULL,
+    trang_thai         NVARCHAR(10)               NOT NULL,
+    ly_do_tu_choi      NVARCHAR(255),
+    ngay_gio_tu_choi   DATETIME,
 
-    CHECK (trang_thai = N'Chờ duyệt' OR trang_thai = N'Đồng ý' OR trang_thai = N'Từ chối'),
+    CHECK (trang_thai = N'Chờ duyệt' OR trang_thai = N'Đồng ý' OR trang_thai = N'Từ chối' OR trang_thai = N'Huỷ'),
     CHECK (ngay_gio_yeu_cau < ngay_gio_hen),
 
     FOREIGN KEY (ma_phong) REFERENCES phong (ma_phong),
@@ -170,13 +187,15 @@ CREATE TABLE ct_xem_phong (
     PRIMARY KEY (ma_phong, ma_nguoi_tim_phong, ngay_gio_yeu_cau)
 )
 
-CREATE TABLE ct_thue_phong (
-    ma_phong           INT          NOT NULL,
-    ma_nguoi_tim_phong INT          NOT NULL,
-    ngay_gio_yeu_cau   DATETIME     NOT NULL,
-    trang_thai         NVARCHAR(10) NOT NULL,
+CREATE TABLE ct_yeu_cau_thue_phong (
+    ma_phong           INT                        NOT NULL,
+    ma_nguoi_tim_phong INT                        NOT NULL,
+    ngay_gio_yeu_cau   DATETIME DEFAULT GETDATE() NOT NULL,
+    trang_thai         NVARCHAR(10)               NOT NULL,
+    ly_do_tu_choi      NVARCHAR(255),
+    ngay_gio_tu_choi   DATETIME,
 
-    CHECK (trang_thai = N'Chờ duyệt' OR trang_thai = N'Đồng ý' OR trang_thai = N'Từ chối'),
+    CHECK (trang_thai = N'Chờ duyệt' OR trang_thai = N'Đồng ý' OR trang_thai = N'Từ chối' OR trang_thai = N'Huỷ'),
 
     FOREIGN KEY (ma_phong) REFERENCES phong (ma_phong),
     FOREIGN KEY (ma_nguoi_tim_phong) REFERENCES nguoi_tim_phong (ma_nguoi_tim_phong),

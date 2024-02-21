@@ -48,7 +48,7 @@ export const seedNguoiTimPhong = async () => {
         ({password, ma_role, ...remain}) => remain
     );
 
-    await prisma.username.createMany({data: resultUsername});
+    await prisma.dang_nhap.createMany({data: resultUsername});
     await prisma.nguoi_tim_phong.createMany({data: resultNguoiTimPhong});
 
 };
