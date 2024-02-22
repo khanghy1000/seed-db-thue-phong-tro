@@ -32,16 +32,16 @@
 
 - Sau khi đọc thông tin của phòng trọ, nếu ưng ý thì người tìm phòng có thể đặt lịch hẹn xem phòng để tìm hiểu thêm. Người tìm phòng có thể huỷ yêu cầu đặt lịch hẹn xem phòng trong trường hợp có việc đột xuất nếu yêu cầu đang chờ duyệt hoặc đã được đồng ý bởi chủ trọ. Người chủ trọ có thể từ chối yêu cầu đặt lịch hẹn xem phòng nếu có việc bận. Nếu chủ trọ từ chối yêu cầu thì phải ghi lý do từ chối và ghi lại ngày giờ từ chối. Người tìm phòng có thể đặt nhiều yêu cầu đặt nhiều lịch hẹn xem phòng cho các phòng trọ khác nhau nhưng phải khác ngày giờ. Nếu cùng 1 phòng trọ thì yêu cầu đặt lịch hẹn xem phòng hiện tại phải bị từ chối/đồng ý/huỷ mới được đặt lại lịch hẹn xem phòng mới cho phòng đó vào ngày giờ khác. Một phòng trọ có thể có nhiều yêu cầu đặt lịch hẹn xem phòng. Mỗi lần yêu cầu phải ghi nhận thông tin ngày giờ yêu cầu, ngày giờ hẹn xem, trạng thái yêu cầu, lý do từ chối, ngày giờ từ chối. Các trạng thái yêu cầu có thể là "Chờ duyệt", "Đồng ý" (chủ trọ đồng ý), "Từ chối" (chủ trọ từ chối), "Huỷ" (người tìm phòng huỷ).
 
-- Nếu ưng ý với một phòng trọ nào đó, người tìm phòng có thể yêu cầu thuê phòng. Người tìm phòng có thể huỷ yêu cầu xem phòng trong trường hợp đổi quyết định nếu yêu cầu đang chờ duyệt. Người chủ trọ có thể từ chối yêu cầu thuê và phải ghi lý do từ chối và ghi lại ngày giờ từ chối. Người tìm phòng có thể yêu cầu thuê nhiều phòng trọ cùng một lúc. Nếu cùng 1 phòng trọ thì yêu cầu thuê hiện tại phải bị từ chối/đồng ý/huỷ mới được đặt lại yêu cầu thuê phòng mới cho phòng đó. Một phòng trọ có thể có nhiều yêu cầu thuê. Mỗi lần yêu cầu phải ghi nhận thông tin ngày giờ yêu cầu, trạng thái yêu cầu, lý do từ chối, ngày giờ từ chối. Các trạng thái yêu cầu có thể là "Chờ duyệt", "Đồng ý" (chủ trọ đồng ý), "Từ chối" (chủ trọ từ chối), "Huỷ" (người tìm phòng huỷ).
+- Nếu ưng ý với một phòng trọ nào đó, người tìm phòng có thể yêu cầu thuê phòng. Người tìm phòng có thể huỷ yêu cầu thuê phòng trong trường hợp đổi quyết định nếu yêu cầu đang chờ duyệt. Người chủ trọ có thể từ chối yêu cầu thuê và phải ghi lý do từ chối và ghi lại ngày giờ từ chối. Người tìm phòng có thể yêu cầu thuê nhiều phòng trọ cùng một lúc. Nếu cùng 1 phòng trọ thì yêu cầu thuê hiện tại phải bị từ chối/đồng ý/huỷ mới được đặt lại yêu cầu thuê phòng mới cho phòng đó. Một phòng trọ có thể có nhiều yêu cầu thuê. Mỗi lần yêu cầu phải ghi nhận thông tin ngày giờ yêu cầu, trạng thái yêu cầu, lý do từ chối, ngày giờ từ chối. Các trạng thái yêu cầu có thể là "Chờ duyệt", "Đồng ý" (chủ trọ đồng ý), "Từ chối" (chủ trọ từ chối), "Huỷ" (người tìm phòng huỷ).
 
 - Sau khi chủ trọ đồng ý yêu cầu thuê một phòng nào đó thì phòng đó sẽ ở trạng thái đã được thuê và ghi lại mã người yêu cầu thuê để biết phòng đó đã được thuê hay chưa. Nếu một phòng đã được thuê thì các người tìm phòng khác sẽ:
   - Không được đặt lịch hẹn xem phòng
   - Không được đặt yêu cầu thuê phòng
   - Vẫn có thể tìm và đọc thông tin phòng
 
-- Nếu phòng đang được thuê thì chủ trọ có thể nhấn trả phòng (xoá mã người thuê hiện tại) để người tìm phòng khác có thể đặt lịch hẹn xem phòng và yêu cầu xem phòng.
+- Nếu phòng đang ở trạng thái đã được thuê mà người thuê hiện tại muốn trả phòng hoặc không muốn thuê nữa thì chủ trọ có thể nhấn trả phòng (xoá mã người thuê hiện tại) để người tìm phòng khác có thể đặt lịch hẹn xem phòng và yêu cầu xem phòng.
 
-- Chủ trọ có thể ẩn phòng mà mình đã đăng. Nếu một phòng bị ẩn thì các người tìm phòng sẽ:
+- Nếu chủ trọ tạm thời không muốn các người tìm phòng tìm được và thuê phòng của mình thì chủ trọ có thể tạm ẩn phòng mà mình đã đăng. Nếu một phòng bị ẩn thì các người tìm phòng sẽ:
   - Không tìm được phòng (trừ người thuê hiện tại nếu phòng đang được thuê)
   - Không đọc được thông tin phòng (trừ người thuê hiện tại nếu phòng đang được thuê)
   - Không được đặt lịch hẹn xem phòng
