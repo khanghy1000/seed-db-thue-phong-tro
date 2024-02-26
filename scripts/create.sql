@@ -137,9 +137,9 @@ CREATE TABLE dich_vu (
 )
 
 CREATE TABLE ct_dich_vu (
-    ma_dich_vu INT NOT NULL,
-    ma_phong   INT NOT NULL,
-    gia        INT NOT NULL,
+    ma_dich_vu INT   NOT NULL,
+    ma_phong   INT   NOT NULL,
+    gia        FLOAT NOT NULL,
     CHECK (gia > 0),
 
     FOREIGN KEY (ma_dich_vu) REFERENCES dich_vu (ma_dich_vu),
