@@ -25,180 +25,222 @@ GO
 -------------------------
 
 
-CREATE TABLE role (
-    ma_role  INT           NOT NULL IDENTITY (1, 1) PRIMARY KEY,
-    ten_role NVARCHAR(100) NOT NULL,
+CREATE TABLE ROLE (
+    MAROLE  INT           NOT NULL IDENTITY (1, 1) PRIMARY KEY,
+    TENROLE NVARCHAR(100) NOT NULL,
 
-    UNIQUE (ten_role)
+    UNIQUE (TENROLE)
 )
 
-INSERT INTO role (ten_role)
-VALUES ('CHU_TRO'),
-       ('NGUOI_TIM_PHONG'),
+INSERT INTO ROLE (TENROLE)
+VALUES ('CHUTRO'),
+       ('NGUOITIMPHONG'),
        ('ADMIN')
 
-CREATE TABLE dang_nhap (
-    username NVARCHAR(100) NOT NULL PRIMARY KEY,
-    password NVARCHAR(255) NOT NULL,
-    ma_role  INT           NOT NULL,
+CREATE TABLE TAIKHOAN (
+    USERNAME NVARCHAR(100) NOT NULL PRIMARY KEY,
+    PASSWORD NVARCHAR(255) NOT NULL,
+    MAROLE   INT           NOT NULL,
 
-    FOREIGN KEY (ma_role) REFERENCES role (ma_role)
+    FOREIGN KEY (MAROLE) REFERENCES ROLE (MAROLE)
 )
 
-CREATE TABLE nguoi_tim_phong (
-    ma_nguoi_tim_phong INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
-    ho_dem             NVARCHAR(255) NOT NULL,
-    ten                NVARCHAR(255) NOT NULL,
-    so_can_cuoc        BIGINT        NOT NULL,
-    gioi_tinh          NVARCHAR(4)   NOT NULL,
-    ngay_sinh          DATE          NOT NULL,
-    email              NVARCHAR(255) NOT NULL,
-    so_dien_thoai      BIGINT        NOT NULL,
-    username           NVARCHAR(100) NOT NULL,
+CREATE TABLE NGUOITIMPHONG (
+    MANGUOITIMPHONG INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
+    HODEM           NVARCHAR(255) NOT NULL,
+    TEN             NVARCHAR(255) NOT NULL,
+    SOCANCUOC       BIGINT        NOT NULL,
+    GIOITINH        NVARCHAR(4)   NOT NULL,
+    NGAYSINH        DATE          NOT NULL,
+    EMAIL           NVARCHAR(255) NOT NULL,
+    SODIENTHOAI     BIGINT        NOT NULL,
+    USERNAME        NVARCHAR(100) NOT NULL,
 
-    UNIQUE (so_can_cuoc),
-    CHECK (gioi_tinh = N'Nam' OR gioi_tinh = N'Nữ' OR gioi_tinh = N'Khác'),
+    UNIQUE (SOCANCUOC),
+    CHECK (GIOITINH = N'NAM' OR GIOITINH = N'NỮ' OR GIOITINH = N'KHÁC'),
 
-    FOREIGN KEY (username) REFERENCES dang_nhap (username)
+    FOREIGN KEY (USERNAME) REFERENCES TAIKHOAN (USERNAME)
 )
 
-CREATE TABLE chu_tro (
-    ma_chu_tro    INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
-    ho_dem        NVARCHAR(255) NOT NULL,
-    ten           NVARCHAR(255) NOT NULL,
-    so_can_cuoc   BIGINT        NOT NULL,
-    gioi_tinh     NVARCHAR(4)   NOT NULL,
-    ngay_sinh     DATE          NOT NULL,
-    email         NVARCHAR(255) NOT NULL,
-    so_dien_thoai BIGINT        NOT NULL,
-    username      NVARCHAR(100) NOT NULL,
+CREATE TABLE CHUTRO (
+    MACHUTRO    INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
+    HODEM       NVARCHAR(255) NOT NULL,
+    TEN         NVARCHAR(255) NOT NULL,
+    SOCANCUOC   BIGINT        NOT NULL,
+    GIOITINH    NVARCHAR(4)   NOT NULL,
+    NGAYSINH    DATE          NOT NULL,
+    EMAIL       NVARCHAR(255) NOT NULL,
+    SODIENTHOAI BIGINT        NOT NULL,
+    USERNAME    NVARCHAR(100) NOT NULL,
 
-    UNIQUE (so_can_cuoc),
-    CHECK (gioi_tinh = N'Nam' OR gioi_tinh = N'Nữ' OR gioi_tinh = N'Khác'),
+    UNIQUE (SOCANCUOC),
+    CHECK (GIOITINH = N'NAM' OR GIOITINH = N'NỮ' OR GIOITINH = N'KHÁC'),
 
-    FOREIGN KEY (username) REFERENCES dang_nhap (username)
+    FOREIGN KEY (USERNAME) REFERENCES TAIKHOAN (USERNAME)
 )
 
-CREATE TABLE tinh (
-    ma_tinh  INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
-    ten_tinh NVARCHAR(255) NOT NULL,
+CREATE TABLE TINH (
+    MATINH  INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
+    TENTINH NVARCHAR(255) NOT NULL,
 
-    UNIQUE (ten_tinh)
+    UNIQUE (TENTINH)
 )
 
-CREATE TABLE quan_huyen (
-    ma_quan_huyen  INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
-    ten_quan_huyen NVARCHAR(255) NOT NULL,
-    ma_tinh        INT           NOT NULL,
+CREATE TABLE QUANHUYEN (
+    MAQUANHUYEN  INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
+    TENQUANHUYEN NVARCHAR(255) NOT NULL,
+    MATINH       INT           NOT NULL,
 
-    UNIQUE (ten_quan_huyen, ma_tinh),
+    UNIQUE (TENQUANHUYEN, MATINH),
 
-    FOREIGN KEY (ma_tinh) REFERENCES tinh (ma_tinh)
+    FOREIGN KEY (MATINH) REFERENCES TINH (MATINH)
 )
 
-CREATE TABLE phuong_xa (
-    ma_phuong_xa  INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
-    ten_phuong_xa NVARCHAR(255) NOT NULL,
-    ma_quan_huyen INT           NOT NULL,
+CREATE TABLE PHUONGXA (
+    MAPHUONGXA  INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
+    TENPHUONGXA NVARCHAR(255) NOT NULL,
+    MAQUANHUYEN INT           NOT NULL,
 
-    UNIQUE (ten_phuong_xa, ma_quan_huyen),
+    UNIQUE (TENPHUONGXA, MAQUANHUYEN),
 
-    FOREIGN KEY (ma_quan_huyen) REFERENCES quan_huyen (ma_quan_huyen)
+    FOREIGN KEY (MAQUANHUYEN) REFERENCES QUANHUYEN (MAQUANHUYEN)
 )
 
-CREATE TABLE phong (
-    ma_phong               INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
-    ten_phong              NVARCHAR(255) NOT NULL,
-    so_nha                 NVARCHAR(255) NOT NULL,
-    ma_phuong_xa           INT           NOT NULL,
-    so_luong_nguoi         INT           NOT NULL,
-    dien_tich_phong        FLOAT         NOT NULL,
-    gia_thue               FLOAT         NOT NULL,
-    tinh_trang_phong       NVARCHAR(255) NOT NULL,
-    ma_chu_tro             INT           NOT NULL,
-    ma_nguoi_thue_hien_tai INT,
-    trang_thai_an          BIT DEFAULT 0 NOT NULL,
-    mo_ta_them             NVARCHAR(MAX),
+CREATE TABLE PHONG (
+    MAPHONG        INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
+    TENPHONG       NVARCHAR(255) NOT NULL,
+    SONHA          NVARCHAR(255) NOT NULL,
+    MAPHUONGXA     INT           NOT NULL,
+    SOLUONGNGUOI   INT           NOT NULL,
+    DIENTICHPHONG  FLOAT         NOT NULL,
+    GIATHUE        FLOAT         NOT NULL,
+    TINHTRANGPHONG NVARCHAR(255) NOT NULL,
+    MACHUTRO       INT           NOT NULL,
+    TRANGTHAIAN    BIT DEFAULT 0 NOT NULL,
+    MOTATHEM       NVARCHAR(MAX),
 
-    CHECK (so_luong_nguoi > 0),
-    CHECK (dien_tich_phong > 0),
-    CHECK (gia_thue > 0),
+    CHECK (SOLUONGNGUOI > 0),
+    CHECK (DIENTICHPHONG > 0),
+    CHECK (GIATHUE > 0),
 
-    FOREIGN KEY (ma_phuong_xa) REFERENCES phuong_xa (ma_phuong_xa),
-    FOREIGN KEY (ma_chu_tro) REFERENCES chu_tro (ma_chu_tro),
-    FOREIGN KEY (ma_nguoi_thue_hien_tai) REFERENCES nguoi_tim_phong (ma_nguoi_tim_phong)
+    FOREIGN KEY (MAPHUONGXA) REFERENCES PHUONGXA (MAPHUONGXA),
+    FOREIGN KEY (MACHUTRO) REFERENCES CHUTRO (MACHUTRO),
 )
 
-CREATE TABLE dich_vu (
-    ma_dich_vu  INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
-    ten_dich_vu NVARCHAR(255) NOT NULL,
+CREATE TABLE LOAIDICHVU (
+    MALOAIDICHVU  INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
+    TENLOAIDICHVU NVARCHAR(255) NOT NULL,
 
-    UNIQUE (ten_dich_vu)
+    UNIQUE (TENLOAIDICHVU)
 )
 
-CREATE TABLE ct_dich_vu (
-    ma_dich_vu INT   NOT NULL,
-    ma_phong   INT   NOT NULL,
-    gia        FLOAT NOT NULL,
-    CHECK (gia > 0),
+CREATE TABLE DICHVU_PHONG (
+    MA_DICHVU_PHONG INT   NOT NULL IDENTITY (1,1) PRIMARY KEY,
+    MALOAIDICHVU    INT   NOT NULL,
+    MAPHONG         INT   NOT NULL,
+    DONGIA          FLOAT NOT NULL,
+    CHECK (DONGIA >= 0),
+    UNIQUE (MALOAIDICHVU, MAPHONG),
 
-    FOREIGN KEY (ma_dich_vu) REFERENCES dich_vu (ma_dich_vu),
-    FOREIGN KEY (ma_phong) REFERENCES phong (ma_phong),
-
-    PRIMARY KEY (ma_dich_vu, ma_phong)
+    FOREIGN KEY (MALOAIDICHVU) REFERENCES LOAIDICHVU (MALOAIDICHVU),
+    FOREIGN KEY (MAPHONG) REFERENCES PHONG (MAPHONG),
 )
 
-CREATE TABLE thiet_bi (
-    ma_thiet_bi  INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
-    ten_thiet_bi NVARCHAR(255) NOT NULL,
+CREATE TABLE LOAITHIETBI (
+    MALOAITHIETBI  INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
+    TENLOAITHIETBI NVARCHAR(255) NOT NULL,
 
-    UNIQUE (ten_thiet_bi)
+    UNIQUE (TENLOAITHIETBI)
 )
 
-CREATE TABLE ct_thiet_bi (
-    ma_thiet_bi INT           NOT NULL,
-    ma_phong    INT           NOT NULL,
-    so_luong    INT           NOT NULL,
-    tinh_trang  NVARCHAR(255) NOT NULL,
+CREATE TABLE THIETBI_PHONG (
+    MA_THIETBI_PHONG INT           NOT NULL IDENTITY (1,1) PRIMARY KEY,
+    MALOAITHIETBI    INT           NOT NULL,
+    MAPHONG          INT           NOT NULL,
+    SOLUONG          INT           NOT NULL,
+    TINHTRANG        NVARCHAR(255) NOT NULL,
 
-    CHECK (so_luong > 0),
+    CHECK (SOLUONG > 0),
+    UNIQUE (MALOAITHIETBI, MAPHONG),
 
-    FOREIGN KEY (ma_thiet_bi) REFERENCES thiet_bi (ma_thiet_bi),
-    FOREIGN KEY (ma_phong) REFERENCES phong (ma_phong),
-
-    PRIMARY KEY (ma_thiet_bi, ma_phong)
+    FOREIGN KEY (MALOAITHIETBI) REFERENCES LOAITHIETBI (MALOAITHIETBI),
+    FOREIGN KEY (MAPHONG) REFERENCES PHONG (MAPHONG),
 )
 
-CREATE TABLE ct_yeu_cau_xem_phong (
-    ma_phong           INT                        NOT NULL,
-    ma_nguoi_tim_phong INT                        NOT NULL,
-    ngay_gio_yeu_cau   DATETIME DEFAULT GETDATE() NOT NULL,
-    ngay_gio_hen       DATETIME                   NOT NULL,
-    trang_thai         NVARCHAR(10)               NOT NULL,
-    ly_do_tu_choi      NVARCHAR(255),
-    ngay_gio_tu_choi   DATETIME,
+CREATE TABLE YEUCAUXEMPHONG (
+    MAYEUCAUXEMPHONG INT                        NOT NULL IDENTITY (1,1) PRIMARY KEY,
+    MAPHONG          INT                        NOT NULL,
+    MANGUOITIMPHONG  INT                        NOT NULL,
+    NGAYGIOYEUCAU    DATETIME DEFAULT GETDATE() NOT NULL,
+    NGAYGIOHEN       DATETIME                   NOT NULL,
+    TRANGTHAI        NVARCHAR(10)               NOT NULL,
+    LYDOTUCHOI       NVARCHAR(255),
+    NGAYGIOTUCHOI    DATETIME,
 
-    CHECK (trang_thai = N'Chờ duyệt' OR trang_thai = N'Đồng ý' OR trang_thai = N'Từ chối' OR trang_thai = N'Huỷ'),
-    CHECK (ngay_gio_yeu_cau < ngay_gio_hen),
+    CHECK (NGAYGIOYEUCAU < NGAYGIOHEN),
+    CHECK (TRANGTHAI = N'CHỜ DUYỆT' OR TRANGTHAI = N'ĐỒNG Ý' OR TRANGTHAI = N'TỪ CHỐI' OR TRANGTHAI = N'HUỶ'),
+    UNIQUE (MAPHONG, MANGUOITIMPHONG, NGAYGIOYEUCAU),
 
-    FOREIGN KEY (ma_phong) REFERENCES phong (ma_phong),
-    FOREIGN KEY (ma_nguoi_tim_phong) REFERENCES nguoi_tim_phong (ma_nguoi_tim_phong),
-
-    PRIMARY KEY (ma_phong, ma_nguoi_tim_phong, ngay_gio_yeu_cau)
+    FOREIGN KEY (MAPHONG) REFERENCES PHONG (MAPHONG),
+    FOREIGN KEY (MANGUOITIMPHONG) REFERENCES NGUOITIMPHONG (MANGUOITIMPHONG),
 )
 
-CREATE TABLE ct_yeu_cau_thue_phong (
-    ma_phong           INT                        NOT NULL,
-    ma_nguoi_tim_phong INT                        NOT NULL,
-    ngay_gio_yeu_cau   DATETIME DEFAULT GETDATE() NOT NULL,
-    trang_thai         NVARCHAR(10)               NOT NULL,
-    ly_do_tu_choi      NVARCHAR(255),
-    ngay_gio_tu_choi   DATETIME,
+CREATE TABLE YEUCAUTHUEPHONG (
+    MAYEUCAUTHUEPHONG INT                        NOT NULL IDENTITY (1,1) PRIMARY KEY,
+    MAPHONG           INT                        NOT NULL,
+    MANGUOITIMPHONG   INT                        NOT NULL,
+    NGAYGIOYEUCAU     DATETIME DEFAULT GETDATE() NOT NULL,
+    NGAYBATDAU        DATE                       NOT NULL,
+    NGAYKETTHUC       DATE                       NOT NULL,
+    TRANGTHAI         NVARCHAR(10)               NOT NULL,
+    LYDOTUCHOI        NVARCHAR(255),
+    NGAYGIOTUCHOI     DATETIME,
 
-    CHECK (trang_thai = N'Chờ duyệt' OR trang_thai = N'Đồng ý' OR trang_thai = N'Từ chối' OR trang_thai = N'Huỷ'),
+    CHECK (NGAYBATDAU < NGAYKETTHUC),
+    CHECK (TRANGTHAI = N'CHỜ DUYỆT' OR TRANGTHAI = N'ĐỒNG Ý' OR TRANGTHAI = N'TỪ CHỐI' OR TRANGTHAI = N'HUỶ'),
+    UNIQUE (MAPHONG, MANGUOITIMPHONG, NGAYGIOYEUCAU),
 
-    FOREIGN KEY (ma_phong) REFERENCES phong (ma_phong),
-    FOREIGN KEY (ma_nguoi_tim_phong) REFERENCES nguoi_tim_phong (ma_nguoi_tim_phong),
+    FOREIGN KEY (MAPHONG) REFERENCES PHONG (MAPHONG),
+    FOREIGN KEY (MANGUOITIMPHONG) REFERENCES NGUOITIMPHONG (MANGUOITIMPHONG),
+)
 
-    PRIMARY KEY (ma_phong, ma_nguoi_tim_phong, ngay_gio_yeu_cau)
+CREATE TABLE THUEPHONG (
+    MATHUEPHONG INT          NOT NULL IDENTITY (1,1) PRIMARY KEY,
+    MANGUOITHUE INT          NOT NULL,
+    MAPHONG     INT          NOT NULL,
+    NGAYBATDAU  DATE         NOT NULL,
+    NGAYKETTHUC DATE         NOT NULL,
+    TRANGTHAI   NVARCHAR(12) NOT NULL,
+
+    CHECK (NGAYBATDAU < NGAYKETTHUC),
+    CHECK (TRANGTHAI = N'ĐANG THUÊ' OR TRANGTHAI = N'ĐÃ TRẢ PHÒNG'),
+    UNIQUE (MANGUOITHUE, MAPHONG, NGAYBATDAU, NGAYKETTHUC),
+
+    FOREIGN KEY (MANGUOITHUE) REFERENCES NGUOITIMPHONG (MANGUOITIMPHONG),
+    FOREIGN KEY (MAPHONG) REFERENCES PHONG (MAPHONG),
+)
+
+CREATE TABLE HOADON (
+    MAHOADON    INT                    NOT NULL IDENTITY (1,1) PRIMARY KEY,
+    MATHUEPHONG INT                    NOT NULL,
+    NGAYLAP     DATE DEFAULT GETDATE() NOT NULL,
+    TIENPHONG   FLOAT                  NOT NULL,
+    DATHANHTOAN BIT  DEFAULT 0         NOT NULL,
+
+    FOREIGN KEY (MATHUEPHONG) REFERENCES THUEPHONG (MATHUEPHONG)
+)
+
+CREATE TABLE CT_HOADON (
+    MAHOADON     INT                    NOT NULL,
+    MALOAIDICHVU INT                    NOT NULL,
+    SOLUONG      INT                    NOT NULL,
+    DONGIA       FLOAT                  NOT NULL,
+
+    CHECK (SOLUONG >= 0),
+    CHECK (DONGIA >= 0),
+
+    FOREIGN KEY (MALOAIDICHVU) REFERENCES LOAIDICHVU (MALOAIDICHVU),
+    FOREIGN KEY (MAHOADON) REFERENCES HOADON (MAHOADON),
+
+    PRIMARY KEY (MALOAIDICHVU, MAHOADON)
 )
